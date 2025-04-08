@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Genre Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-container {
+            margin: 20px 0;
+        }
+        textarea, input[type="text"], input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+        }
+        .result-container {
+            margin-top: 20px;
+        }
+        .error {
+            color: red;
+        }
+        .genres {
+            color: #006600;
+            font-weight: bold;
+        }
+        .preview-img {
+            max-width: 200px;
+            margin: 10px 0;
+        }
+        .overview-display {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Movie Genre Predictor</h1>
+    
+    <div class="form-container">
+        <form method="POST" enctype="multipart/form-data">
+            <label for="overview">Movie Overview:</label><br>
+            <textarea id="overview" name="overview" rows="4" 
+                      placeholder="Enter movie overview here">{{ overview }}</textarea><br>
+            
+            <label for="poster_image">Poster Image:</label><br>
+            <input type="file" id="poster_image" name="poster_image" 
+                   accept=".jpg,.jpeg,.png"><br>
+            
+            <input type="submit" value="Predict Genres">
+        </form>
+    </div>
+
+    <div class="result-container">
+        {% if overview %}
+            <div class="overview-display">
+                <h3>Description:</h3>
+                <p>{{ overview }}</p>
+            </div>
+        {% endif %}
+
+        {% if image_path %}
+            <img src="{{ url_for('static', filename=image_path) }}" 
+                 alt="Movie Poster" class="preview-img">
+        {% endif %}
+
+        {% if error %}
+            <p class="error">Error: {{ error }}</p>
+        {% endif %}
+        
+        {% if genres is not none %}
+            {% if genres %}
+                <h3>Predicted Genres:</h3>
+                <p class="genres">{{ genres|join(', ') }}</p>
+            {% else %}
+                <p>No genres predicted</p>
+            {% endif %}
+        {% endif %}
+    </div>
+</body>
+</html>
